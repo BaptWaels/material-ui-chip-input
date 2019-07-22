@@ -183,6 +183,12 @@ class ChipInput extends React.Component {
     }
   }
 
+  componentDidUpdate (previousProps) {
+    if(!previousProps.defaultValue && this.props.defaultValue) {
+      this.setState({ chips: this.props.defaultValue });
+    }
+  }
+
   componentWillUnmount () {
     clearTimeout(this.inputBlurTimeout)
   }
