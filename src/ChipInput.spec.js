@@ -137,7 +137,7 @@ describe('uncontrolled mode', () => {
     )
   })
 
-  it('set defaultValue asynchronously (= after first render)', () => {
+  it('set defaultValue asynchronously after first render', () => {
     const tree = mount(
       <ChipInput />
     );
@@ -146,6 +146,20 @@ describe('uncontrolled mode', () => {
     // see: https://github.com/airbnb/enzyme/issues/34#issuecomment-437284281
     tree.find('input').simulate('click'); 
     expect(tree.find('Chip').map((chip) => chip.text())).toEqual(['Foo', 'Bar']);
+  })
+
+  it('update defaultValue after a user input', () => {
+    const tree = mount(
+      <ChipInput />
+    );
+    tree.find('input').getDOMNode().value = 'Foo';
+    tree.find('input').simulate('keyDown', { keyCode: 13 }); // press enter
+
+    tree.setProps({ defaultValue: ['Foo', 'Bar'] });
+    // in order to trigger a componentDidUpdate with Jest
+    // see: https://github.com/airbnb/enzyme/issues/34#issuecomment-437284281
+    tree.find('input').simulate('click'); 
+    expect(tree.find('Chip').map((chip) => chip.text())).toEqual(['Foo']);
   })
 })
 
